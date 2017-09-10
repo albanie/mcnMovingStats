@@ -23,6 +23,6 @@ The module also requires *autonn*, which can similarly be installed with `vl_con
 
 ### Notes
 
-To provide numerical stability, the `vl_nnmovingstats()` function tracks the *shifted* moments of features, rather than their mean and covariance (which can be computed directly from the shifted moments).  Good explanations of incremental covariance estimation can be found [here](http://rebcabin.github.io/blog/2013/01/22/covariance-matrices/) and [here](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance).
+To provide numerical stability, the `vl_nnmovingstats()` function tracks the *shifted* moments of features, rather than their mean and covariance (which can be computed directly from the shifted moments).  Good explanations of incremental covariance estimation can be found [here](http://rebcabin.github.io/blog/2013/01/22/covariance-matrices/) and [here](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance).  Note that typically, the higher the feature layer, the longer the covariance estimation will take to converge.
 
 Code by Samuel Albanie and David Novotny.
