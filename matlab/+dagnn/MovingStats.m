@@ -4,8 +4,8 @@ classdef MovingStats < dagnn.ElementWise
     N = 0
     K = []
     mu = 0
-    sm1 = 0 % shifted mean
-    sm2 = 0
+    sm1 = 0 % shifted first moment
+    sm2 = 0 % shifted second moment
     cov = 0
     average = 0 
     updateDiff = 0 
@@ -24,7 +24,7 @@ classdef MovingStats < dagnn.ElementWise
       [obj.sm1, obj.sm2, obj.mu, obj.cov, obj.N] ...
             = vl_nnmovingstats(inputs{1}, obj.sm1, obj.sM2, obj.N, 'K', obj.K) ;
 
-       if obj.vis
+       if obj.vis % optional visualisation code
          obj.descCheck  = [obj.descCheck vl_colsubset(x_,100)] ;
          disp(size(obj.descCheck)) ;
          if size(obj.descCheck,2) > 1e4
@@ -45,7 +45,6 @@ classdef MovingStats < dagnn.ElementWise
       % Use Frobenius to track changes to Covariance matrix
       df = norm(obj.cov(:) - prevCov(:), 'fro') ;
       obj.updateDiff = df ;
-
       n_ = obj.numAveraged  ;
       m_ = n_ + 1  ;
       obj.average = (n_ * obj.average + df) / m_  ;
