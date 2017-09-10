@@ -5,7 +5,6 @@ function run_cov_estimator
 % Licensed under The MIT License [see LICENSE.md for details]
 
   gpus = 1 ;
-  batchSize = 32 ;
   useCached = 1 ; % load results from cache if available
 
   % select features to track 
@@ -18,12 +17,11 @@ function run_cov_estimator
 
   for ii = 1:numel(models)
     modelPair = models{ii} ;
-    imagenet_eval(modelPair, batchSize, gpus, useCached) ;
+    imagenet_eval(modelPair, gpus, useCached) ;
   end
 
-% -------------------------------------------------------
-function imagenet_eval(model, batchSize, gpus, useCached)
-% -------------------------------------------------------
-  imagenet_cov_estimation('model', model{1}, 'batchSize', batchSize, ...
-                          'gpus', gpus, 'useCached', useCached, ...
-                          'targetFeats', model{2}) ;
+% --------------------------------------------
+function imagenet_eval(model, gpus, useCached)
+% --------------------------------------------
+  imagenet_cov_estimation('model', model{1}, 'gpus', gpus, ...
+                          'useCached', useCached, 'targetFeats', model{2}) ;

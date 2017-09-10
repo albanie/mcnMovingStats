@@ -67,12 +67,11 @@ function imagenet_cov_estimation(varargin)
   for ii = 1:numel(samples)
     batch = samples(ii) ;
     runNet(imdb, net, batch);
-    if mod(ii,100)==1
+    if mod(ii,100) == 1
       fprintf('(%d/%d): %.2f (Hz)\n', ii, numel(samples), ii/round(toc)) ;
       for li=1:numel(tracked)
         l_ = net.layers(net.getLayerIndex(tracked{li})).block ;
-        df_ = l_.average ;
-        mu_ = mean(l_.M12(:)) ;
+        df_ = l_.average ; mu_ = mean(l_.mu(:)) ;
         fprintf('%s, df = %1.2g, mn = %1.2g\n', tracked{li}, df_, mu_) ;
       end
       tic ;
@@ -136,7 +135,7 @@ function [dag, tracked] = insert_cov_estimator_layers(dag, opts)
     player = dag.layers(idx) ;
     name = sprintf('%s_cov_est', player.outputs{1}) ;
     outVar = {name} ; inputs = player.outputs ;
-    block = dagnn.CovarianceEstimator() ;
+    block = dagnn.MovingStats() ;
     params = {[name '_mu'], [name '_sig']} ;
     dag.addLayer(name, block, inputs, outVar, params) ;
     dag.vars(dag.getVarIndex(outVar)).precious = 1 ;

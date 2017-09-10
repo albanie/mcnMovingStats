@@ -36,7 +36,7 @@ function [sm1, sm2, mu, cov, N] = vl_nnmovingstats(x, psm1, psm2, N, varargin)
   opts.K = [] ;
   opts.bessel = true ;
   opts.maxSample = 1e4 ;
-  [opts, dzdy] = vl_argparsepos(varargin) ;
+  [opts, dzdy] = vl_argparsepos(opts, varargin) ;
 
   % Use the sample mean for K if not provided
   if isempty(opts.K), K = mean(x(:)) ; else, K = opts.K ; end

@@ -22,7 +22,7 @@ classdef MovingStats < dagnn.ElementWise
       % provide an offset to ensure numerical stability (initisalise to mean)
       if isempty(obj.K), obj.K = mean(inputs{1}(:)) ; end 
       [obj.sm1, obj.sm2, obj.mu, obj.cov, obj.N] ...
-            = vl_nnmovingstats(inputs{1}, obj.sm1, obj.sM2, obj.N, 'K', obj.K) ;
+            = vl_nnmovingstats(inputs{1}, obj.sm1, obj.sm2, obj.N, 'K', obj.K) ;
 
        if obj.vis % optional visualisation code
          obj.descCheck  = [obj.descCheck vl_colsubset(x_,100)] ;
