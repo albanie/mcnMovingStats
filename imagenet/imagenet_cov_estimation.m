@@ -38,7 +38,7 @@ function imagenet_cov_estimation(varargin)
 
   opts.gpus = 3 ;
   opts.useCached = 1 ;
-  opts.sampleSize =  5000 ;
+  opts.sampleSize =  10000 ;
   opts.model = 'imagenet-resnet-50-dag' ;
   opts.targetFeats = {'res2c_relu'} ;
   opts.featDir = fullfile(vl_rootnn, 'data/featCovs') ;
@@ -63,15 +63,17 @@ function imagenet_cov_estimation(varargin)
   samples = find(imdb.images.set == 1) ;
   samples = vl_colsubset(samples, opts.sampleSize) ;
 
-  tic
+  tic ;
   for ii = 1:numel(samples)
     batch = samples(ii) ;
     runNet(imdb, net, batch);
-    if mod(ii,100) == 1
-      fprintf('(%d/%d): %.2f (Hz)\n', ii, numel(samples), ii/round(toc)) ;
+    if mod(ii, 100) == 1
+      if ii == 1, seen = 1 ; else, seen = 100 ; end  % ignore endpoints
+      fprintf('(%d/%d): %.2f (Hz)\n', ii, numel(samples), seen/round(toc)) ;
       for li=1:numel(tracked)
         l_ = net.layers(net.getLayerIndex(tracked{li})).block ;
-        df_ = l_.average ; mu_ = mean(l_.mu(:)) ;
+        df_ = l_.average ; % track frobenius norm of covariance updates
+        mu_ = mean(l_.mu(:)) ;
         fprintf('%s, df = %1.2g, mn = %1.2g\n', tracked{li}, df_, mu_) ;
       end
       tic ;
