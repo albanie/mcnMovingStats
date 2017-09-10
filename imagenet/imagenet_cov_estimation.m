@@ -1,11 +1,46 @@
 function imagenet_cov_estimation(varargin)
+%IMAGENET_COV_ESTIMATION Estimate feature covariance on ImageNet
+%   IMAGENET_COV_ESTIMATION computes an online estimation of a 
+%   chosen set of network activations over a subset of the ImageNet data.
+%   This pass over the data mimics a standard training run by applying 
+%   the typical data augmentation scheme used when training networks for 
+%   classification on ImageNet.
+%
+%   IMAGENET_COV_ESTIMATION(..., 'option', value, ...) accepts the following
+%   options:
+%
+%   `model`:: ''
+%    The name of a trained matconvnet model. 
+%
+%   `modelDir`:: ''
+%    The path of the directory containing the model. 
+%
+%   `gpus`:: []
+%    Device on which to run network 
+%
+%   `targetFeats`:: {'res2c_relu'}
+%    A cell array of the names of variables to be tracked in the network.
+%
+%   `featDir`:: fullfile(vl_rootnn, 'data/featCovs')
+%    The path to the directory in which the estimated feature statistics will
+%    be stored.
+%
+%   `sampleSize`:: 5000
+%    The number of dataset sample images used to compute the estimates of the
+%    statistics.
+%
+%   `useCached`:: 1
+%    If set and the computed statistics are found on disk, the function will 
+%    return immediately.
+%
+% Copyright (C) 2017 Samuel Albanie and David Novotny
+% All rights reserved.
 
   opts.gpus = 3 ;
   opts.useCached = 1 ;
-  opts.batchSize = 128 ;
   opts.sampleSize =  5000 ;
-  opts.model = 'SE-ResNet-50-mcn' ;
-  opts.targetFeats = {'conv5_3_relu'} ;
+  opts.model = 'imagenet-resnet-50-dag' ;
+  opts.targetFeats = {'res2c_relu'} ;
   opts.featDir = fullfile(vl_rootnn, 'data/featCovs') ;
   opts.modelDir = fullfile(vl_rootnn, 'data/models-import') ;
   opts.dataDir = fullfile(vl_rootnn, 'data/datasets/ILSVRC2012') ;
@@ -73,7 +108,7 @@ function runNet(imdb, net, batch)
 % -------------------------------------------
 function imt = applyAugmentation(imt, imsize) 
 % -------------------------------------------
-%APPLYAUGMENTATION(IMT, IMSIZE) - apply standard image augmentation
+% APPLYAUGMENTATION(IMT, IMSIZE) - apply standard image augmentation
 
   w = size(imt,2) ; h = size(imt,1) ;
   factor = [imsize(1)/h imsize(2)/w];
