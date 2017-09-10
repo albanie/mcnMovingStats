@@ -2,6 +2,9 @@
 
 A small module designed to provide code for computing network activation statistics.  This can be useful for tasks such as online estimation of the covariance of features across a dataset.
 
+### Demo
+
+The [run\_cov\_estimator.m](imagenet/run_cov_estimator.m) provides an example of how to estimate the means and covariances of a subset of feature activations for `ResNet-50` on a subsample of the ImageNet training data.
 
 ### Installation 
 
