@@ -1,21 +1,23 @@
 function run_cov_estimator
 % RUN_COV_ESTIMATOR estimate covariance on imagenet training data
 %
-% Copyright (C) 2017 Samuel Albanie
+% Copyright (C) 2017 Samuel Albanie and David Novotny
 % Licensed under The MIT License [see LICENSE.md for details]
 
   gpus = 1 ;
   batchSize = 32 ;
   useCached = 1 ; % load results from cache if available
 
-  importedModels = {
-  {'SE-ResNet-50-mcn', {'conv2_3_relu'}}, ... % {'conv2_3_relu','conv3_4_relu', 'conv4_6_relu', 'conv5_3_relu'}}, ...
-  {'SE-ResNet-101-mcn', {'conv2_3_relu','conv3_4_relu', 'conv4_23_relu', 'conv5_3_relu'}}...
-  {'SE-ResNet-152-mcn', {'conv2_3_relu','conv3_8_relu', 'conv4_36_relu', 'conv5_3_relu'}} ...
+  % select features to track 
+  targetFeats = {'res2c_relu', 'res3d_relu', 'res4f_relu'} ;
+
+  % select models to compute statistics of these features for 
+  models = {
+    {'imagenet-resnet-50-dag', targetFeats}, ...
   } ;
 
-  for ii = 1:numel(importedModels)
-    modelPair = importedModels{ii} ;
+  for ii = 1:numel(models)
+    modelPair = models{ii} ;
     imagenet_eval(modelPair, batchSize, gpus, useCached) ;
   end
 
