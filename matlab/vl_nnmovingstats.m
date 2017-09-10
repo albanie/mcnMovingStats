@@ -1,6 +1,6 @@
 function [sm1, sm2, mu, cov, N] = vl_nnmovingstats(x, psm1, psm2, N, varargin)
 %VL_NNMOVINGSTATS rolling statistical estimates
-%   [MU,COV] = VL_NNMOVINGSTATS(X, PSM1, PSM2, N, VARARGIN) takes in 
+%   [SM1,SM2,MU,COV,N] = VL_NNMOVINGSTATS(X,PSM1,PSM2,N,VARARGIN) takes in 
 %   a tensor X, previous estimates of the shifted first moment PSM1 and 
 %   shifted second moment PSM2 and computes updated first and second order
 %   shifted statistics SM1 and SM2, together with estimates MU and COV of the
